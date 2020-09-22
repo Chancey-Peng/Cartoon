@@ -1,9 +1,9 @@
+from datetime import datetime
+
 from django.db import models
 
 # Create your models here.
 
-
-from datetime import datetime
 
 # 覆盖默认django自带的用户表
 from django.contrib.auth.models import AbstractUser
@@ -13,16 +13,24 @@ from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
+GENDER_CHOICES = (
+        ("male", u"男"),
+        ("female", u"女"),
+        ("unknown", u"不详")
+    )
+
+
+class BaseModel(models.Model):
+    update_time = models.DateTimeField(default=datetime.now, verbose_name="更新时间")
+
+    class Meta:
+        abstract = True
+
 
 class UserProfile(AbstractUser):
     """
     用户信息
     """
-    GENDER_CHOICES = (
-        ("male", u"男"),
-        ("female", u"女"),
-        ("unknown", u"不详")
-    )
     nick_name = models.CharField(max_length=30, null=True, blank=True, verbose_name="昵称")
     user_sn = models.CharField(max_length=50, verbose_name="用户ID", primary_key=True)
     user_avatar = models.ImageField(upload_to="avatar/%Y/%m", default="avatar/default.png", null=True, blank=True, verbose_name="用户头像")

@@ -1,10 +1,11 @@
+from datetime import datetime
+
 from django.db import models
 
 # Create your models here.
 
-
-from datetime import datetime
-from apps.users.models import UserLeavingMessage
+# from apps.users.models import UserLeavingMessage
+from apps.users.models import BaseModel
 
 
 class Category(models.Model):
@@ -35,27 +36,29 @@ class Category(models.Model):
         return self.category_name
 
 
-class Caricature(models.Model):
+class Caricature(BaseModel):
     """
     漫画
     """
     category = models.ForeignKey(Category, related_name='cartoon_category', null=True, blank=True, verbose_name="漫画类目",
                                  on_delete=models.CASCADE)
     cartoon_sn = models.CharField(max_length=50, verbose_name="漫画编号", primary_key=True)
-    cartoon_name = models.CharField(max_length=100, verbose_name="漫画名称")
-    cartoon_brief = models.TextField(max_length=500, verbose_name="漫画描述")
+    cartoon_name = models.CharField(max_length=50, verbose_name="漫画名称")
+    cartoon_brief = models.TextField(max_length=300, verbose_name="漫画描述")
     cartoon_front_iamge = models.ImageField(upload_to="", null=True, blank=True, verbose_name="漫画封面图")
-    cartoon_comment = models.ForeignKey(UserLeavingMessage.message, related_name='cartoon_comment', null=True, blank=True, verbose_name="漫画评论",
-                                 on_delete=models.CASCADE)
+    cartoon_chapter = models.ImageField(default=0, verbose_name="章节数量")
+    cartoon_tag = models.CharField(default="", verbose_name="漫画标签", max_length=10)
+    # cartoon_comment = models.ForeignKey(UserLeavingMessage.message, related_name='cartoon_comment', null=True, blank=True, verbose_name="漫画评论",
+    #                              on_delete=models.CASCADE)
     is_hot = models.BooleanField(default=False, verbose_name="是否热门")
     is_new = models.BigIntegerField(default=False, verbose_name="是否为新上架")
     is_update = models.BooleanField(default=False, verbose_name="是否更新")
     is_pay = models.BooleanField(default=False, verbose_name="是否付费")
     fav_num = models.IntegerField(default=0, verbose_name="收藏数量")
-    update_time = models.DateTimeField(default=datetime.now, verbose_name="更新时间")
+    # update_time = models.DateTimeField(default=datetime.now, verbose_name="更新时间")
 
     class Meta:
-        verbose_name = "漫画"
+        verbose_name = "漫画信息"
         verbose_name_plural = verbose_name
         db_table = 'cartoon'
 
@@ -63,15 +66,40 @@ class Caricature(models.Model):
         return self.cartoon_name
 
 
-class Chapter(models.Model):
+class Chapter(BaseModel):
     """
     漫画章节
     """
     chapter_sn = models.CharField(max_length=100, verbose_name="章节", primary_key=True)
-    cartoon_name = models.ForeignKey(Caricature, related_name='cartoon_chapter', null=True, blank=True, verbose_name="漫画章节",
-                                 on_delete=models.CASCADE)
-    update_time = models.DateTimeField(default=datetime.now, verbose_name="更新时间")
+    cartoon_name = models.ForeignKey(Caricature, related_name='cartoon_chapter', verbose_name="漫画章节",
+                                 on_delete=models.CASCADE)  #on_delete表示对应的外键数据被删除后，当前的数据应该被删除
+    chapter_name = models.CharField(max_length=100, verbose_name=u"漫画章节名")
+    # update_time = models.DateTimeField(default=datetime.now, verbose_name="更新时间")
 
+    class Meta:
+        verbose_name = "漫画章节"
+        verbose_name_plural = verbose_name
+        db_table = 'cartoon_chapter'
+
+    def __str__(self):
+        return self.cartoon_name
+
+
+class ChapterContent(BaseModel):
+    """
+    章节内容
+    """
+    chapter_name = models.ForeignKey(Chapter, related_name='chapter_content', verbose_name="章节内容",
+                                 on_delete=models.CASCADE)
+    content_name =  models.CharField(max_length=100, verbose_name="")
+
+    class Meta:
+        verbose_name = "章节内容"
+        verbose_name_plural = verbose_name
+        db_table = 'chapter_content'
+
+    def __str__(self):
+        return self.chapter_name
 
 class Author(models.Model):
     """
