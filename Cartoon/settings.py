@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'apps.cartoon_message.apps.CartoonMessageConfig',
     'apps.caricature.apps.CaricatureConfig',
-    'apps.users.apps.UsersConfig'
+    'apps.users.apps.UsersConfig',
+    'apps.operation.apps.OperationConfig'
 ]
 
 MIDDLEWARE = [
@@ -107,6 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# 覆盖默认django自带的用户表
+AUTH_USER_MODEL = "users.UserProfile"
 
 
 # Internationalization
