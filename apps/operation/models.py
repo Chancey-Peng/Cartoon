@@ -5,7 +5,7 @@ from django.db import models
 from datetime import datetime
 
 from apps.users.models import BaseModel
-from apps.caricature.models import Caricature
+from apps.caricature.models import Cartoon
 
 from django.contrib.auth import get_user_model
 
@@ -29,7 +29,7 @@ class CartoonComment(BaseModel):
     用户评论/漫画评论内容
     """
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name="用户")
-    cartoon = models.ForeignKey(Caricature, on_delete=models.CASCADE, ValueError="漫画")
+    cartoon = models.ForeignKey(Cartoon, on_delete=models.CASCADE, ValueError="漫画")
     comment = models.CharField(max_length=200, verbose_name="评论内容")
 
     class Meta:
@@ -79,7 +79,7 @@ class UserCartoon(BaseModel):
     用户浏览漫画
     """
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name="用户")
-    cartoon = models.ForeignKey(Caricature, on_delete=models.CASCADE, ValueError="漫画")
+    cartoon = models.ForeignKey(Cartoon, on_delete=models.CASCADE, ValueError="漫画")
 
     class Meta:
         verbose_name = "用户浏览漫画"

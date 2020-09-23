@@ -7,9 +7,6 @@ from django.db import models
 
 # 覆盖默认django自带的用户表
 from django.contrib.auth.models import AbstractUser
-# from django.contrib.auth import get_user_model
-
-# User = get_user_model()
 
 
 # Create your models here.

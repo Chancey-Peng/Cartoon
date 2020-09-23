@@ -4,7 +4,7 @@ from django.db import models
 
 
 from apps.users.models import BaseModel
-from apps.caricature.models import Caricature
+from apps.caricature.models import Cartoon
 
 
 class City(BaseModel):
@@ -22,7 +22,7 @@ class Publisher(models.Model):
     """
     publisher_name = models.CharField(max_length=20, verbose_name="出版社")
     publisher_sn = models.CharField(max_length=50, verbose_name="出版社编号")
-    publisher_own = models.ForeignKey(Caricature, related_name='publish_cartoon', on_delete=models.CASCADE,
+    publisher_own = models.ForeignKey(Cartoon, related_name='publish_cartoon', on_delete=models.CASCADE,
                                       verbose_name="作者版权漫画",
                                  )
     publisher_address = models.CharField(max_length=100, verbose_name="出版社地址")
@@ -42,7 +42,7 @@ class Author(BaseModel):
     """
     author = models.CharField(max_length=20, verbose_name="作者姓名")
     gender = models.CharField(max_length=5, verbose_name="作者性别")
-    author_own = models.ForeignKey(Caricature, related_name='author_cartoon', on_delete=models.CASCADE,
+    author_own = models.ForeignKey(Cartoon, related_name='author_cartoon', on_delete=models.CASCADE,
                                    verbose_name="作者版权漫画")
     author_avatar = models.ImageField(max_length=100, default="", upload_to="author/%Y/%m", verbose_name="作者头像")
     author_age = models.CharField(max_length=4, verbose_name="作者年龄")
