@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 
     'apps.caricature.apps.CaricatureConfig',
     'apps.users.apps.UsersConfig',
-    'apps.operation.apps.OperationConfig'
+    'apps.operation.apps.OperationConfig',
+    'apps.organizations.apps.OrganizationsConfig'
 ]
 
 MIDDLEWARE = [

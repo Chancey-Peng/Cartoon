@@ -6,6 +6,7 @@ from django.db import models
 
 # from apps.users.models import UserLeavingMessage
 from apps.users.models import BaseModel
+from apps.organizations.models import Author
 
 
 class Category(models.Model):
@@ -42,8 +43,9 @@ class Caricature(BaseModel):
     """
     category = models.ForeignKey(Category, related_name='cartoon_category', null=True, blank=True, verbose_name="漫画类目",
                                  on_delete=models.CASCADE)
-    cartoon_sn = models.CharField(max_length=50, verbose_name="漫画编号", primary_key=True)
+    cartoon_sn = models.CharField(max_length=30, verbose_name="漫画编号", primary_key=True)
     cartoon_name = models.CharField(max_length=50, verbose_name="漫画名称")
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name="漫画作者")
     cartoon_brief = models.TextField(max_length=300, verbose_name="漫画描述")
     cartoon_front_iamge = models.ImageField(upload_to="", null=True, blank=True, verbose_name="漫画封面图")
     cartoon_chapter = models.ImageField(default=0, verbose_name="章节数量")
@@ -52,9 +54,9 @@ class Caricature(BaseModel):
     #                              on_delete=models.CASCADE)
     is_hot = models.BooleanField(default=False, verbose_name="是否热门")
     is_new = models.BigIntegerField(default=False, verbose_name="是否为新上架")
-    is_update = models.BooleanField(default=False, verbose_name="是否更新")
     is_pay = models.BooleanField(default=False, verbose_name="是否付费")
     fav_num = models.IntegerField(default=0, verbose_name="收藏数量")
+    is_state = models.CharField(max_length=10, choices=(("serial", "连载中"), ("end", "已完结")), default="serial", verbose_name="漫画状态")
     # update_time = models.DateTimeField(default=datetime.now, verbose_name="更新时间")
 
     class Meta:
@@ -112,44 +114,3 @@ class CartoonResource(BaseModel):
         verbose_name = "漫画资源"
         verbose_name_plural = verbose_name
         db_table = "cartoon_resource"
-
-
-class Author(models.Model):
-    """
-    作者
-    """
-    author = models.CharField(max_length=20, verbose_name="作者姓名")
-    gender = models.CharField(max_length=5, verbose_name="作者性别")
-    author_own = models.ForeignKey(Caricature, related_name='author_cartoon', null=True, blank=True, verbose_name="作者版权漫画",
-                                 on_delete=models.CASCADE)
-    age = models.CharField(max_length=4, verbose_name="作者年龄")
-    add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
-
-    class Meta:
-        verbose_name = "作者"
-        verbose_name_plural = verbose_name
-        db_table = 'cartoon_author'
-
-    def __str__(self):
-        return self.author
-
-
-class Publisher(models.Model):
-    """
-    出版社
-    """
-    publisher_name = models.CharField(max_length=20, verbose_name="出版社")
-    publisher_sn = models.CharField(max_length=50, verbose_name="出版社编号")
-    publisher_own = models.ForeignKey(Caricature, related_name='publish_cartoon', null=True, blank=True, verbose_name="作者版权漫画",
-                                 on_delete=models.CASCADE)
-    publisher_address = models.CharField(max_length=100, verbose_name="出版社地址")
-    add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
-
-    class Meta:
-        verbose_name = "出版社"
-        verbose_name_plural = verbose_name
-        db_table = 'cartoon_publisher'
-
-    def __str__(self):
-        return self.publisher_name
-
