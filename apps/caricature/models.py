@@ -91,7 +91,8 @@ class ChapterContent(BaseModel):
     """
     chapter_name = models.ForeignKey(Chapter, related_name='chapter_content', verbose_name="章节内容",
                                  on_delete=models.CASCADE)
-    content_name =  models.CharField(max_length=100, verbose_name="")
+    content_name = models.CharField(max_length=100, verbose_name="章节名称")
+    url = models.CharField(max_length=200, verbose_name=u"访问地址")
 
     class Meta:
         verbose_name = "章节内容"
@@ -100,6 +101,18 @@ class ChapterContent(BaseModel):
 
     def __str__(self):
         return self.chapter_name
+
+
+class CartoonResource(BaseModel):
+    cartoon = models.ForeignKey(Caricature, on_delete=models.CASCADE, verbose_name="漫画")
+    name = models.CharField(max_length=100, verbose_name=u"名称")
+    file = models.FileField(max_length=200, upload_to="cartoon/resource/%Y/%m", verbose_name="下载地址")
+
+    class Meta:
+        verbose_name = "漫画资源"
+        verbose_name_plural = verbose_name
+        db_table = "cartoon_resource"
+
 
 class Author(models.Model):
     """
