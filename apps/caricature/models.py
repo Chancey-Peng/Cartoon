@@ -11,7 +11,7 @@ class Cartoon(models.Model):
     """
     cartoon_sn = models.CharField(max_length=30, verbose_name="漫画编号", primary_key=True)
     cartoon_name = models.CharField(max_length=50, verbose_name="漫画名称")
-    author = models.ForeignKey(CartoonAuthor, related_name='cartoon_author', on_delete=models.CASCADE, verbose_name="漫画作者")
+    author = models.ForeignKey(CartoonAuthor, on_delete=models.CASCADE, verbose_name="漫画作者")
     cartoon_brief = models.TextField(max_length=300, verbose_name="漫画描述")
     cartoon_front_image = models.ImageField(upload_to="", null=True, blank=True, verbose_name="漫画封面图")
     cartoon_chapter = models.ImageField(default=0, verbose_name="章节数量")
